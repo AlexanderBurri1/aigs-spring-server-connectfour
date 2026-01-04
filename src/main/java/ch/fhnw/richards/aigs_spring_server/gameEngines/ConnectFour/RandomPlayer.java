@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// Author: YOUR NAME
+
 public class RandomPlayer implements Player {
 
     private final Random rng = new Random();

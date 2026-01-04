@@ -5,7 +5,6 @@ import java.util.HashMap;
 import ch.fhnw.richards.aigs_spring_server.game.Game;
 import ch.fhnw.richards.aigs_spring_server.gameEngines.GameEngine;
 
-// Author: YOUR NAME (required by project rules) :contentReference[oaicite:2]{index=2}
 public class ConnectFour implements GameEngine {
 
     private static final int ROWS = 6;
@@ -24,41 +23,34 @@ public class ConnectFour implements GameEngine {
     @Override
     public Game move(Game game, HashMap<String, String> moveMap) {
 
-        // If already finished, ignore
-        if (Boolean.TRUE.equals(game.getResult())) return game;
+                if (Boolean.TRUE.equals(game.getResult())) return game;
 
-        // Ensure board exists
-        long[][] board = game.getBoard();
+               long[][] board = game.getBoard();
         if (board == null || board.length != ROWS || board[0].length != COLS) {
             board = new long[ROWS][COLS];
             game.setBoard(board);
         }
 
-        // Parse move (column)
-        Move move = new Move(moveMap);
-        if (!move.isValid()) return game; // illegal move ignored :contentReference[oaicite:3]{index=3}
+               Move move = new Move(moveMap);
+        if (!move.isValid()) return game;
 
-        // Human drop
-        if (!ConnectFourLogic.drop(board, move.getCol(), HUMAN)) return game; // column full -> ignore
+                if (!ConnectFourLogic.drop(board, move.getCol(), HUMAN)) return game;
 
-        // Check end after human
-        if (ConnectFourLogic.hasFour(board, HUMAN) || ConnectFourLogic.isDraw(board)) {
+               if (ConnectFourLogic.hasFour(board, HUMAN) || ConnectFourLogic.isDraw(board)) {
             game.setResult(true);
             return game;
         }
 
-        // AI chooses column based on difficulty (>=2 is "smart")
-        Player aiPlayer = (game.getDifficulty() <= 1) ? new RandomPlayer() : new SmartPlayer();
+                Player aiPlayer = (game.getDifficulty() <= 1) ? new RandomPlayer() : new SmartPlayer(5);
         int aiCol = aiPlayer.chooseColumn(board, AI, HUMAN);
 
-        if (aiCol == -1) { // no valid moves
+        if (aiCol == -1) {
             game.setResult(true);
             return game;
         }
 
         ConnectFourLogic.drop(board, aiCol, AI);
 
-        // Check end after AI
         if (ConnectFourLogic.hasFour(board, AI) || ConnectFourLogic.isDraw(board)) {
             game.setResult(true);
         }

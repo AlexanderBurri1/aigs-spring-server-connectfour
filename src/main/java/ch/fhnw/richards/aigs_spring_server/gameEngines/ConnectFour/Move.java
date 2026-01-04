@@ -2,7 +2,7 @@ package ch.fhnw.richards.aigs_spring_server.gameEngines.ConnectFour;
 
 import java.util.HashMap;
 
-// Author: YOUR NAME
+
 public class Move {
     private final int col;
     private final boolean valid;
